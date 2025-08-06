@@ -1,0 +1,31 @@
+@if (eventResource.error()) {
+<app-not-found-page /> }
+
+<!-- -->
+
+@if ( eventResource.isLoading() ) {
+<div class="text-center mt-4"><span class="loading loading-spinner text-primary"></span></div>
+}
+
+<!-- -->
+
+@if ( eventResource.hasValue() ) {
+<section class="grid lg:grid-cols-2 gap-10 lg:gap-20 px-6 lg:px-30 pt-10 lg:pt-15">
+    <div>
+        <div class="breadcrumbs text-lg">
+            <ul>
+                <li><a [routerLink]="['/eventos']">Eventos</a></li>
+                <li class="font-bold">{{ eventResource.value().title }}</li>
+            </ul>
+        </div>
+
+        <image-carousel [imagesCarousel]="eventResource.value().images" imageType="eventos" />
+
+    </div>
+    <div class="lg:mt-10">
+        <h1 class="text-4xl mb-4 font-medium">{{ eventResource.value().title }}</h1>
+        <p class="text-xl font-light">{{ eventResource.value().description }}</p>
+    </div>
+</section>
+
+<related-events [eventExclude]="eventResource.value().slug" /> }

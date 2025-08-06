@@ -1,0 +1,38 @@
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th class="text-primary">
+            Nombre
+        </th>
+        <th class="text-primary">
+            Descripción
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row -->
+
+      @for (material of materials; track material.id) {
+        <tr>
+          <td>
+              {{ material.name }}
+          </td>
+          <td>
+              {{ material.description }}
+          </td>
+          <th>
+            <a [routerLink]="['/admin/product', material.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteMaterial(material.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+
+  </table>
+</div>
+

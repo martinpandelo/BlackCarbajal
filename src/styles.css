@@ -1,1 +1,26 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "daisyui" {
+    themes: light --default, light --prefersdark, night;
+}
+
+.font-public {
+  font-family: 'Playfair', serif;
+}
+
+@theme {
+    --animate-fadeIn: fadeIn 0.3s ease-in-out;
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+}
+
+.swiper-pagination-bullet-active {
+    background-color: #000 !important;
+}

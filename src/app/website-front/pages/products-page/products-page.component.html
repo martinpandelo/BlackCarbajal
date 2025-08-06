@@ -1,0 +1,265 @@
+<!-- SUBHEADER: filtros + paginado, sticky -->
+<div class="sticky top-0 z-40 bg-base-100/80 backdrop-blur-md border-b border-base-300 hidden lg:block">
+  <section class="px-6 lg:px-20">
+    <div class="flex flex-col lg:flex-row gap-1 py-4 lg:items-center">
+
+      <div class="text-xl font-bold self-center pe-3">Filtrar por:</div>
+
+      <!-- NOVEDADES -->
+        <input class="btn text-xl"
+            type="radio"
+            [class]="'btn text-xl ' + (categoria() === 'novedades' ? 'btn-neutral' : '')"
+            [routerLink]="['/productos', 'novedades']"
+            aria-label="Novedades"
+            [checked]="categoria() === 'novedades'"
+            value="Novedades" />
+
+
+      <div class="divider divider-horizontal mx-1 hidden lg:flex"></div>
+
+      <!-- CATEGORÍAS DROPDOWN -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl" [class.btn-neutral]="categoria() && categoria() !== 'novedades'">
+          {{ (!categoria() || categoria() === 'novedades') ? 'Todos los eventos' : categoriaNombre() }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+
+        <ul tabindex="0" class="dropdown-content menu menu-lg bg-base-100 rounded-box z-10 w-xs p-2 shadow">
+          <li>
+            <a (click)="onCategoriaSelect('')">
+              Todos los eventos
+            </a>
+          </li>
+
+          @for (cat of categoryResource.value()?.categories; track $index) {
+            <li>
+              <a (click)="onCategoriaSelect(cat.slug)" [class.menu-active]="categoria() === cat.slug">
+                {{ cat.title }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="divider divider-horizontal mx-1 hidden lg:flex"></div>
+
+      <!-- SELECT TIPOS -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl" [class.btn-neutral]="!!tipoQuery()">
+          {{ tipoNombre() || 'Todos los artículos' }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu menu-lg bg-base-100 rounded-box z-10 w-md p-2 shadow">
+          <li>
+            <a (click)="onTipoSelect('')" [class.menu-active]="!tipoQuery()">Todos los artículos</a>
+          </li>
+          @for (tipo of typeResource.value()?.types; track $index) {
+            <li>
+              <a (click)="onTipoSelect(tipo.slug)" [class.menu-active]="tipoQuery() === tipo.slug">
+                {{ tipo.name }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="divider divider-horizontal mx-1 hidden lg:flex"></div>
+
+      <!-- SELECT MATERIALES -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl" [class.btn-neutral]="!!materialQuery()">
+          {{ materialNombre() || 'Todos los materiales' }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu menu-lg bg-base-100 rounded-box z-10 w-md p-2 shadow">
+          <li>
+            <a (click)="onMaterialSelect('')" [class.menu-active]="!materialQuery()">Todos los materiales</a>
+          </li>
+          @for (mat of materialResource.value()?.materials; track $index) {
+            <li>
+              <a (click)="onMaterialSelect(mat.slug)" [class.menu-active]="materialQuery() === mat.slug">
+                {{ mat.name }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      @if (tipoNombre() || categoriaNombre() || materialNombre() ) {
+        <div class="divider divider-horizontal mx-1 hidden lg:flex"></div>
+        <button [routerLink]="['/productos']" type="button" aria-label="Quitar filtro" class="btn btn-neutral btn-square"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="bi bi-x-lg"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"></path></svg></button>
+      }
+
+    </div>
+  </section>
+</div>
+
+
+<!-- FILTROS MOBILE -->
+<div class="drawer sticky top-0 lg:hidden z-40">
+  <input id="drawer-filtros" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content px-4 py-4 bg-base-100 border-b border-base-300">
+
+    <label for="drawer-filtros" class="btn btn-neutral w-full justify-between">
+      <span class="text-lg">Filtros</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-filter-left" viewBox="0 0 16 16">
+        <path d="M2 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+      </svg>
+    </label>
+
+  </div>
+
+  <div class="drawer-side z-80">
+    <label for="drawer-filtros" class="drawer-overlay"></label>
+    <div class="menu bg-base-200 text-base-content min-h-full w-80 p-4 space-y-4 pt-18">
+      <div class="text-xl font-bold">Filtrar por:</div>
+
+      <!-- NOVEDADES -->
+      <input class="btn text-xl w-full"
+          type="radio"
+          [class.btn-neutral]="categoria() === 'novedades'"
+          [routerLink]="['/productos', 'novedades']"
+          [checked]="categoria() === 'novedades'"
+          value="Novedades"
+          aria-label="Novedades" />
+
+      <!-- CATEGORÍA -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl w-full" [class.btn-neutral]="categoria() && categoria() !== 'novedades'">
+          {{ (!categoria() || categoria() === 'novedades') ? 'Todos los eventos' : categoriaNombre() }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+
+        <ul tabindex="0" class="dropdown-content menu menu-lg bg-base-100 rounded-box z-10 w-xs p-2 shadow">
+          <li>
+            <a (click)="onCategoriaSelect('')">
+              Todos los eventos
+            </a>
+          </li>
+
+          @for (cat of categoryResource.value()?.categories; track $index) {
+            <li>
+              <a (click)="onCategoriaSelect(cat.slug)" [class.menu-active]="categoria() === cat.slug">
+                {{ cat.title }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- TIPO -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl w-full" [class.btn-neutral]="!!tipoQuery()">
+          {{ (tipoNombre() | truncateText:15) || 'Todos los artículos' }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu w-full bg-base-100 rounded-box z-10 p-2 shadow">
+          <li>
+            <a (click)="onTipoSelect('')" [class.menu-active]="!tipoQuery()">Todos los artículos</a>
+          </li>
+          @for (tipo of typeResource.value()?.types; track $index) {
+            <li>
+              <a (click)="onTipoSelect(tipo.slug)" [class.menu-active]="tipoQuery() === tipo.slug">
+                {{ tipo.name }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- MATERIAL -->
+      <div class="dropdown dropdown-center">
+        <div tabindex="0" role="button" class="btn text-xl w-full" [class.btn-neutral]="!!materialQuery()">
+          {{ (materialNombre() | truncateText:15) || 'Todos los materiales' }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 9l6 6l6-6"/></svg>
+        </div>
+        <ul tabindex="0" class="dropdown-content menu w-full bg-base-100 rounded-box z-10 p-2 shadow">
+          <li>
+            <a (click)="onMaterialSelect('')" [class.menu-active]="!materialQuery()">Todos los materiales</a>
+          </li>
+          @for (mat of materialResource.value()?.materials; track $index) {
+            <li>
+              <a (click)="onMaterialSelect(mat.slug)" [class.menu-active]="materialQuery() === mat.slug">
+                {{ mat.name }}
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- BOTÓN LIMPIAR -->
+      <button [routerLink]="['/productos']" type="button" class="btn text-xl btn-outline mt-4 w-full">Quitar filtros</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- BREADCRUMBS -->
+<section class="flex flex-col lg:flex-row px-6 lg:px-20 pt-6">
+
+  <div class="breadcrumbs flex-1 text-lg border-b">
+    <ul>
+      <li><a [routerLink]="['/']">Home</a></li>
+      <li><a [routerLink]="['/productos']">Productos</a></li>
+      <li class="font-bold">
+        @if (searchQuery()) {
+          Resultados de búsqueda para: <strong class="ml-1">"{{ searchQuery() }}"</strong>
+        } @else {
+          {{ categoriaNombre() || 'Todos los productos' }}
+          @if (tipoNombre()) {
+            <span class="opacity-70 ps-1"> / {{ tipoNombre() }}</span>
+          }
+          @if (materialNombre()) {
+            <span class="opacity-70 ps-1"> / {{ materialNombre() }}</span>
+          }
+        }
+      </li>
+    </ul>
+  </div>
+
+  <!-- PAGINADO -->
+  <div class="mt-2 lg:mt-0 lg:ms-auto">
+    <app-pagination
+      [pages]="productResource.value()?.pages ?? 0"
+      [currentPage]="paginationService.currentPage()"
+    />
+  </div>
+
+</section>
+
+<!-- LISTA / LOADING -->
+@if (productResource.isLoading()) {
+  <div class="flex justify-center items-center min-h-[50vh]">
+    <span class="loading loading-spinner text-black w-12 h-12"></span>
+  </div>
+} @else {
+
+  <!-- PRODUCTOS -->
+  @if (productResource.value()?.products!.length > 0) {
+    <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-2 md:gap-5 lg:px-20 py-10">
+      @for (prod of productResource.value()?.products; track $index) {
+        <product-card [product]="prod" />
+      }
+    </div>
+  } @else {
+    <div class="w-full px-6 py-20 lg:px-20">
+      <p class="flex items-center gap-2 text-xl text-error">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-emoji-frown-fill" viewBox="0 0 16 16">
+          <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m-2.715 5.933a.5.5 0 0 1-.183-.683A4.5 4.5 0 0 1 8 9.5a4.5 4.5 0 0 1 3.898 2.25.5.5 0 0 1-.866.5A3.5 3.5 0 0 0 8 10.5a3.5 3.5 0 0 0-3.032 1.75.5.5 0 0 1-.683.183M10 8c-.552 0-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5S10.552 8 10 8"/>
+        </svg>
+        No encontramos productos para estos filtros
+      </p>
+    </div>
+  }
+
+}
+
+<!-- PAGINADO INFERIOR -->
+@if ((productResource.value()?.pages ?? 0) > 1) {
+  <div class="mb-20 px-6 lg:px-20">
+    <app-pagination
+      [pages]="productResource.value()?.pages ?? 0"
+      [currentPage]="paginationService.currentPage()"
+    />
+  </div>
+}

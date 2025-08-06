@@ -1,0 +1,12 @@
+<div class="card bg-base-100 rounded-none animate-fadeIn group" [routerLink]="['/evento', event().slug ]">
+    <figure>
+        <img [src]="event().images | pathImage:'eventos' " [alt]="event().title" class="transition-all duration-500 group-hover:scale-110 group-hover:opacity-80 cursor-pointer" />
+    </figure>
+    <div class="card-body">
+        <h2 class="card-title text-2xl md:text-3xl font-bold leading-none cursor-pointer hover:text-gray-700" [routerLink]="['/evento', event().slug ]">{{ event().title }}</h2>
+        <p class="text-lg leading-5 font-light">{{ event().description | truncateText:60 }}</p>
+        <div class="card-actions mt-2">
+            <button [routerLink]="['/evento', event().slug ]" class="btn btn-outline rounded-none hover:bg-base-200 text-xl">ver +</button>
+        </div>
+    </div>
+</div>

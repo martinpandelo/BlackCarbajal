@@ -1,0 +1,29 @@
+<section class="px-6 lg:px-20 pt-10 lg:pt-10">
+    <div class="breadcrumbs text-lg border-b">
+        <ul>
+            <li><a [routerLink]="['/']">Home</a></li>
+            <li class="font-bold">Catálogos</li>
+        </ul>
+    </div>
+    <h1 class="text-5xl my-4 font-medium">Catálogos</h1>
+</section>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 lg:px-20 pb-20 pt-10">
+
+    @for (cat of catalogsResource.value(); track $index) {
+    <div class="card lg:card-side bg-base-100">
+        <figure>
+            <img [src]="cat.image | pathImage:'catalogos' " [alt]="cat.title" />
+        </figure>
+        <div class="card-body">
+            <h2 class="text-2xl font-medium">{{ cat.title }}</h2>
+            <div class="card-actions mt-4">
+                <a [href]="cat.link" target="_blank" class="btn btn-outline btn-lg rounded-none text-xl hover:bg-base-200">Ver online</a>
+            </div>
+        </div>
+    </div>
+    } @empty {
+    <p>No hay catálogos</p>
+    }
+
+</div>

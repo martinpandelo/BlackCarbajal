@@ -1,0 +1,9 @@
+@if (relatedProductsResource.hasValue() && relatedProductsResource.value().products.length) {
+<h2 class="text-center text-4xl pb-8 pt-35">Más de {{ categoryName() }}</h2>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-10 lg:px-20 pb-20">
+    @for (prod of relatedProductsResource.value().products; track $index) {
+    <product-card [product]="prod" />
+    }
+</div>
+}

@@ -1,0 +1,71 @@
+@if (productResource.error()) {
+  <app-not-found-page />
+}
+
+@if (productResource.isLoading()) {
+  <div class="flex items-center justify-center min-h-screen">
+    <span class="loading loading-spinner text-black w-12 h-12"></span>
+  </div>
+}
+
+@if ( productResource.hasValue() ) {
+  <section class="grid lg:grid-cols-2 gap-10 lg:gap-20 px-6 lg:px-30 pt-10 lg:pt-15">
+      <div>
+          <div class="breadcrumbs text-lg">
+              <ul>
+                  <li><a [routerLink]="['/productos']">Productos</a></li>
+                  <li><a [routerLink]="['/productos', productResource.value().categories[0].slug ]">{{ productResource.value().categories[0].name }}</a></li>
+                  <li class="font-bold">{{ productResource.value().cod }}</li>
+              </ul>
+          </div>
+
+          <image-carousel [imagesCarousel]="productResource.value().images" />
+
+      </div>
+      <div class="lg:mt-10">
+          <h2 class="text-2xl">{{ productResource.value().cod }}</h2>
+          <h1 class="text-4xl mb-4 font-medium leading-none">{{ productResource.value().title }}</h1>
+          <p class="text-lg font-light">{{ productResource.value().description }}</p>
+
+
+          @if (relatedProductsResource.hasValue() && relatedProductsResource.value().length > 0) {
+            <div class="mt-5">
+              <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                @for (related of relatedProductsResource.value(); track related.id) {
+                  <a [routerLink]="['/producto', related.slug]"
+                    [ngClass]="{
+                      'border-4 border-black rounded-lg': productResource.hasValue() && related.slug === productResource.value().slug
+                    }"
+                    class="my-2 cursor-pointer">
+                    <div class="avatar">
+                      <div class="rounded overflow-hidden">
+                        <img [src]="related.images | pathImage:'productos'" class="transition-all duration-500 hover:scale-110 hover:opacity-80" />
+                      </div>
+                    </div>
+                    <div class="stat place-items-center text-center p-2">
+                      <div class="text-md font-bold border-b border-gray-300 mb-2">{{ related.cod }}</div>
+                      <div class="text-xs leading-none">{{ related.title }}</div>
+                    </div>
+                  </a>
+                }
+              </div>
+            </div>
+          }
+
+      </div>
+  </section>
+
+@if (productResource.value().related !== null  ) {
+  <section class="px-6 lg:px-30 pt-20">
+      <h3 class="text-3xl mb-5">Relación de Tamaños</h3>
+      <div>
+        <a data-fancybox="tira" [href]="productResource.value().related! | pathImage:'relacion'">
+          <img [src]="productResource.value().related! | pathImage:'relacion'" class="w-full" alt="{{ productResource.value().cod }}" />
+        </a>
+      </div>
+  </section>
+}
+
+<related-products [categorySlug]="productResource.value().categories[0].slug" [categoryName]="productResource.value().categories[0].name" [productExclude]="productResource.value().slug" />
+
+}

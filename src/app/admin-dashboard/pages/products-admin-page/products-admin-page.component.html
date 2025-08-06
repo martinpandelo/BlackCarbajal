@@ -1,0 +1,32 @@
+<h1 class="text-2xl font-bold">Listado de productos</h1>
+<h3 class="text-md">Total de productos <div class="badge badge-primary">{{ productResource.value()?.count }}</div></h3>
+
+<div class="divider"></div>
+
+<div class="flex gap-2 items-center h-20">
+  <app-pagination [pages]="productResource.value()?.pages ?? 0" [currentPage]="paginationService.currentPage()" />
+
+  <select #selectPerPage class="select w-32" (change)="productsPerPage.set(+selectPerPage.value)">
+    @for (option of [10, 20, 50, 100]; track option) {
+      <option [value]="option" [selected]="option === productsPerPage()">
+        {{ option }}
+      </option>
+    }
+  </select>
+
+  <div class="flex flex-1">
+  </div>
+
+  <button routerLink="/admin/product/0" class="btn btn-primary">Nuevo producto</button>
+
+</div>
+
+<!-- Listado -->
+<product-table
+  [products]="productResource.value()?.products ?? []"
+  [sortBy]="sortBy()"
+  [sortDirection]="sortDirection()"
+  (search)="searchQuery.set($event)"
+  (sort)="onSort($event)"
+  (delete)="onDeleteProduct($event)"
+/>

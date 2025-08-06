@@ -1,0 +1,22 @@
+<div class="swiper" #swiperDiv>
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        <!-- Slides -->
+        @for (image of images; track $index) {
+        <div class="swiper-slide">
+            <a data-fancybox="gallery" [href]="image | pathImage:imageType()">
+                <img [src]="image | pathImage:imageType()" class="w-full object-cover transition-all duration-500 hover:scale-105 hover:opacity-80" />
+            </a>
+        </div>
+        }
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+    <!-- If we need scrollbar -->
+    <div class="swiper-scrollbar"></div>
+</div>

@@ -1,0 +1,23 @@
+<h2 class="text-center text-5xl pb-8 pt-25">Eventos</h2>
+
+<section class="relative">
+
+    <swiper-container init="false" #swiperContainer class="slider px-15 lg:px-40 py-10">
+        @for (event of eventsResource.value()?.events; track $index) {
+        <swiper-slide>
+            <event-card [event]="event" />
+        </swiper-slide>
+        }
+    </swiper-container>
+
+    <button class="swiper-next btn btn-circle absolute left-2 lg:left-4 top-1/2 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+    </svg></button>
+
+    <button class="swiper-prev btn btn-circle cursor-pointer absolute right-2 lg:right-4 top-1/2 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+    </svg></button>
+
+</section>
+
+<div class="text-center pb-20 pt-10"><button [routerLink]="['/eventos']" class="btn btn-outline btn-lg rounded-none px-20 text-2xl hover:bg-base-200">Ver todos</button></div>

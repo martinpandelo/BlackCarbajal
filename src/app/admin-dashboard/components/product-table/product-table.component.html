@@ -1,0 +1,75 @@
+<input type="text" placeholder="Buscar" class="input input-primary" (input)="onSearch($event)" />
+
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th class="cursor-pointer text-primary" (click)="setSort('title')">
+            Título
+            <span class="text-error ps-2" *ngIf="sortBy === 'title'">
+              {{ sortDirection === 'asc' ? '▼' : '▲' }}
+            </span>
+        </th>
+        <th class="cursor-pointer text-primary" (click)="setSort('cod')">
+          Código
+          <span class="text-error ps-2" *ngIf="sortBy === 'cod'">
+              {{ sortDirection === 'asc' ? '▼' : '▲' }}
+          </span>
+        </th>
+        <th class="cursor-pointer text-primary" (click)="setSort('categories')">
+          Categoría
+          <span class="text-error ps-2" *ngIf="sortBy === 'categories'">
+              {{ sortDirection === 'asc' ? '▼' : '▲' }}
+          </span>
+        </th>
+        <th class="cursor-pointer text-primary" (click)="setSort('novelty')">
+          Novedad
+          <span class="text-error ps-2" *ngIf="sortBy === 'novelty'">
+              {{ sortDirection === 'asc' ? '▼' : '▲' }}
+          </span>
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row -->
+
+      @for (product of products; track product.id) {
+        <tr>
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar">
+                <div class="mask mask-squircle h-12 w-12">
+                  <img
+                    [src]="product.images | pathImage"
+                    [alt]="product.title" />
+                </div>
+              </div>
+              <div>
+                <a [routerLink]="['/admin/product', product.id]" class="font-bold hover:text-accent transition-colors duration-300">{{ product.title }}</a>
+                <div class="text-sm opacity-50"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+              {{ product.cod }}
+          </td>
+          <td>
+              {{ getCategoryNames(product) }}
+          </td>
+          <td>
+            {{ product.novelty }}
+          </td>
+          <th>
+            <a [routerLink]="['/admin/product', product.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteProduct(product.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+
+  </table>
+</div>

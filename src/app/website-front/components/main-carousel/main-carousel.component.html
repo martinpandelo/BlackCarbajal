@@ -1,0 +1,28 @@
+<div class="relative w-full h-96 md:h-120 lg:h-150 xl:h-160 overflow-hidden">
+
+    <div class="w-full h-full relative">
+
+        @for (slide of slideResource.value(); track $index; let i = $index) {
+
+        <div class="absolute inset-0 transition-opacity duration-700 ease-in-out" [ngClass]="{
+          'opacity-100 z-10 pointer-events-auto': i === currentIndex,
+          'opacity-0 z-0 pointer-events-none': i !== currentIndex
+        }">
+            <picture>
+                <source [srcset]="slide.image_mobile | pathImage:'slides'" media="(max-width: 768px)">
+                <img [src]="slide.image_desktop | pathImage:'slides'" class="w-full h-full object-cover" />
+            </picture>
+        </div>
+
+        }
+    </div>
+
+    <!-- Botones -->
+    <button class="cursor-pointer absolute left-4 top-1/2 transform -translate-y-1/2 z-10 hover:opacity-50" (click)="prevSlideManual()"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/>
+    </svg></button>
+    <button class="cursor-pointer absolute right-4 top-1/2 transform -translate-y-1/2 z-10 hover:opacity-50" (click)="nextSlideManual()"><svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+    </svg></button>
+
+</div>

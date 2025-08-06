@@ -1,0 +1,40 @@
+<div class="join flex justify-center items-center gap-0">
+
+  <!-- (Opcional) Botón Anterior -->
+  <a
+    class="join-item btn btn-md"
+    [class.btn-disabled]="currentPage() <= 1"
+    [routerLink]="[]"
+    [queryParams]="{ page: prevPage() }"
+    [queryParamsHandling]="'merge'">
+    «
+  </a>
+
+  <!-- Tokens: números y '…' -->
+  @for (token of condensedPages(); track $index) {
+    @if (token === 'ellipsis') {
+      <button class="join-item btn btn-md btn-ghost btn-disabled">…</button>
+    } @else {
+      <a
+        class="join-item btn btn-md text-xl"
+        [class.btn-neutral]="token === currentPage()"
+        [routerLink]="[]"
+        [queryParams]="{ page: token }"
+        [queryParamsHandling]="'merge'">
+        {{ token }}
+      </a>
+    }
+  }
+
+  <!-- (Opcional) Botón Siguiente -->
+  <a
+    class="join-item btn btn-md"
+    [class.btn-disabled]="currentPage() >= pages()"
+    [routerLink]="[]"
+    [queryParams]="{ page: nextPage() }"
+    [queryParamsHandling]="'merge'">
+    »
+  </a>
+
+</div>
+

@@ -1,0 +1,78 @@
+<home-main-carousel />
+
+<section class="bg-[#c1c1c1] text-center px-6 py-15 text-white">
+    <h1 class="text-5xl pb-2">Premios y Regalos</h1>
+    <h2 class="text-2xl font-light">Desarrollados con el mayor cuidado y la más alta calidad, dando jerarquía a tus eventos.</h2>
+</section>
+
+
+@if ( productResource.hasValue() && productResource.value().products.length > 0 ) {
+  <h2 id="novedades" class="text-center text-5xl pb-8 pt-25">Novedades</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-10 lg:px-20">
+      @for (prod of productResource.value().products | slice:0:8; track $index) {
+        <product-card [product]="prod" />
+      }
+  </div>
+  <div class="text-center pb-20 pt-10"><button [routerLink]="['/productos/novedades']" class="btn btn-outline btn-lg rounded-none px-20 text-2xl hover:bg-base-200">Ver más novedades</button></div>
+}
+
+
+<h2 class="text-center text-5xl pb-8 pt-25">Productos</h2>
+
+  @if ( categoryResource.hasValue() ) {
+
+    @for (cat of categoryResource.value().categories; let i = $index; track $index) {
+
+      @if (i === categoryResource.value().categories.length - 2) {
+      <div class="grid grid-cols-2 gap-0">
+          @for (lastCat of categoryResource.value().categories.slice(-2); let j = $index; track j) {
+          <div class="col-span-2 lg:col-span-1 relative overflow-hidden bg-[#e9e9e3] mb-4">
+              <div class="absolute inset-x-0 top-3/4 lg:top-2/4 h-full w-full bg-top-right bg-cover z-0" [style.background-image]="'url(' + (lastCat.image ?? '' | pathImage:'categorias' ) + ')'"></div>
+              <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-10 col-start-2 lg:col-span-8 lg:col-start-3 pt-15 lg:pt-20 pb-50 lg:pb-60 relative overflow-hidden">
+                      <h3 class="text-5xl">{{ lastCat.title }}</h3>
+                      <p class="py-5 text-xl font-light">{{ lastCat.description }}</p>
+                      <button [routerLink]="['/productos', lastCat.slug]" class="btn btn-outline btn-lg rounded-none px-20 text-2xl hover:bg-base-200">
+                      Ver +
+                    </button>
+                  </div>
+              </div>
+          </div>
+          }
+      </div>
+      } @else if (i < categoryResource.value().categories.length - 2) {
+
+          @if (i % 2===0 ) { <!-- Diseño impar -->
+          <div class="grid grid-cols-12 gap-4 mb-4 bg-[#e9e9e3]">
+              <div class="col-span-12 lg:col-span-6 xl:col-span-5 min-h-64 relative overflow-hidden">
+                  <div class="absolute inset-x-0 top-1/8 h-full w-full bg-top-right bg-cover" [style.background-image]="'url(' + (cat.image ?? '' | pathImage:'categorias' ) + ')'"></div>
+              </div>
+              <div class="col-span-10 col-end-12 lg:col-span-4 lg:col-end-12 pb-15 lg:py-30">
+                  <h3 class="text-5xl">{{ cat.title }}</h3>
+                  <p class="py-5 text-xl font-light">{{ cat.description }}</p>
+                  <button [routerLink]="['/productos', cat.slug]" class="btn btn-outline btn-lg rounded-none px-20 text-2xl hover:bg-base-200">
+                  Ver +
+                </button>
+              </div>
+          </div>
+          } @else { <!-- Diseño par -->
+          <div class="grid grid-cols-12 gap-4 mb-4 bg-[#e9e9e3]">
+              <div class="col-span-10 col-end-12 lg:col-span-4 lg:col-end-6 pt-15 lg:py-30">
+                  <h3 class="text-5xl">{{ cat.title }}</h3>
+                  <p class="py-5 text-xl font-light">{{ cat.description }}</p>
+                  <button [routerLink]="['/productos', cat.slug]" class="btn btn-outline btn-lg rounded-none px-20 text-2xl hover:bg-base-200">
+                  Ver +
+                </button>
+              </div>
+              <div class="col-span-12 lg:col-span-6 lg:col-end-13 xl:col-span-5 xl:col-end-13 min-h-64 relative overflow-hidden">
+                  <div class="absolute inset-x-0 top-1/8 h-full w-full bg-top-right bg-cover" [style.background-image]="'url(' + (cat.image ?? '' | pathImage:'categorias' ) + ')'"></div>
+              </div>
+          </div>
+          }
+      }
+    }
+  }
+
+  <home-slide-events />
+
+  <home-catalogs />

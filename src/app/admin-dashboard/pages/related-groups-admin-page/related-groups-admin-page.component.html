@@ -1,0 +1,57 @@
+<h1 class="text-2xl font-bold">Imágenes de productos relacionados</h1>
+
+<div class="divider"></div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+
+  <fieldset class="fieldset">
+      <legend class="fieldset-legend">Clave del grupo (slug)</legend>
+      <input
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="Clave del grupo (slug)"
+        formControlName="key"
+        [class.border-error]="formUtils.isValidField(form, 'key')"
+         />
+        <form-error-label [control]="form.get('key')!" fieldName="key" />
+  </fieldset>
+
+
+  <fieldset class="fieldset">
+    <input
+      type="file"
+      accept="image/*"
+      (change)="onFileChange($event)"
+      class="file-input file-input-bordered w-full"
+      [class.border-error]="formUtils.isValidField(form, 'image')"
+    />
+    <form-error-label [control]="form.get('image')!" fieldName="image" />
+  </fieldset>
+
+  <button type="submit" class="btn btn-primary w-full" >
+    Cargar grupo relacionado
+  </button>
+</form>
+
+<div class="divider"></div>
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+  @for (group of relatedGroups(); track group.key) {
+    <div class="border rounded p-2 text-center">
+
+      <img [src]="group.image | pathImage:'relacion'" class="rounded mb-2 max-h-40 object-contain mx-auto" />
+      <div class="font-bold">{{ group.key }}</div>
+      <button class="btn btn-error btn-sm my-2" (click)="deleteGroup(group.key)">
+        Eliminar
+      </button>
+    </div>
+  }
+</div>
+
+@if (wasSaved()) {
+  <div class="toast toast-top toast-center">
+    <div class="alert alert-success">
+      <span>{{ successMessage() }}</span>
+    </div>
+  </div>
+}

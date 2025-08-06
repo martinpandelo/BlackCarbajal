@@ -1,0 +1,27 @@
+<section class="px-6 lg:px-20 pt-10 lg:pt-10">
+    <div class="breadcrumbs text-lg border-b">
+        <ul>
+            <li><a [routerLink]="['/']">Home</a></li>
+            <li class="font-bold">Eventos</li>
+        </ul>
+    </div>
+    <h1 class="text-5xl my-4 font-medium">Eventos</h1>
+</section>
+
+    @if (eventResource.isLoading()) {
+      <div class="col-span-full text-center py-10">
+          <span class="loading loading-spinner loading-lg text-black"></span>
+      </div>
+    } @else {
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 lg:px-20 pb-20 pt-10">
+          @for (event of eventResource.value()?.events; track $index) {
+          <event-card [event]="event" />
+          } @empty {
+          <p>No hay eventos</p>
+          }
+      </div>
+    }
+
+@if ( (eventResource.value()?.pages ?? 0) > 1 ) {
+<app-pagination [pages]="eventResource.value()?.pages ?? 0" [currentPage]="paginationService.currentPage()" />
+}

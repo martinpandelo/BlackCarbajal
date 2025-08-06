@@ -1,0 +1,8 @@
+@if (relatedEventsResource.hasValue() && relatedEventsResource.value().events.length) {
+<h2 class="text-center text-4xl pb-8 pt-35">Otros eventos</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-4 gap-10 lg:px-20 pb-20">
+    @for (event of relatedEventsResource.value().events; track $index) {
+    <event-card [event]="event" /> }
+</div>
+}
