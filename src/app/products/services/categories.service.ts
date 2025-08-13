@@ -25,7 +25,6 @@ const emptyCategory: Category = {
 export class CategoriesService {
 
   private http = inject(HttpClient);
-
   private categoriesCache = new Map<string, CategoriesResponse>();
   private categoryCacheById = new Map<number, Category>();
 
@@ -134,10 +133,8 @@ export class CategoriesService {
   }
 
   private removeCategoryFromCache(id: number) {
-    // Borrar de los mapas individuales
     this.categoryCacheById.delete(id);
 
-    // Limpiar el category de todos los arrays de categories en el cache
     this.categoriesCache.forEach((response, key) => {
       const filteredCategories = response.categories.filter(category => category.id !== id);
       this.categoriesCache.set(key, {
@@ -147,7 +144,7 @@ export class CategoriesService {
     });
   }
 
-  updateCategoryCache(category: Category) {
+  private updateCategoryCache(category: Category) {
       this.categoryCacheById.set(category.id, category);
 
       const categoryId = category.id;

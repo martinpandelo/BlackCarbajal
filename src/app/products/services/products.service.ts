@@ -164,41 +164,6 @@ export class ProductsService {
     );
   }
 
-  private removeProductFromCache(id: number) {
-    // Borrar de los mapas individuales
-    this.productCacheById.delete(id);
-
-    // eliminar del cache por slug
-    for (const [slug, product] of this.productCacheBySlug.entries()) {
-      if (product.id === id) {
-        this.productCacheBySlug.delete(slug);
-        break;
-      }
-    }
-
-    // Limpiar el producto de todos los arrays de products en el cache
-    this.productsCache.forEach((response, key) => {
-      const filteredProducts = response.products.filter(product => product.id !== id);
-      this.productsCache.set(key, {
-        ...response,
-        products: filteredProducts,
-      });
-    });
-  }
-
-  updateProductCache(product: Product) {
-    this.productCacheById.set(product.id, product);
-    this.productCacheBySlug.set(product.slug, product);
-
-    const productId = product.id;
-
-    this.productsCache.forEach(productsResponse => {
-      productsResponse.products = productsResponse.products.map(currentProduct =>
-        currentProduct.id === productId ? product : currentProduct
-      );
-    });
-  }
-
   uploadImages(images?: FileList): Observable<string[]>{
     if(!images) return of([]);
 
@@ -216,6 +181,38 @@ export class ProductsService {
     return this.http.post<{ fileName: string}>(`${apiUrl}/files/product`, formData).pipe(
       map( (resp) => resp.fileName )
     )
+  }
+
+  private removeProductFromCache(id: number) {
+    this.productCacheById.delete(id);
+
+    for (const [slug, product] of this.productCacheBySlug.entries()) {
+      if (product.id === id) {
+        this.productCacheBySlug.delete(slug);
+        break;
+      }
+    }
+
+    this.productsCache.forEach((response, key) => {
+      const filteredProducts = response.products.filter(product => product.id !== id);
+      this.productsCache.set(key, {
+        ...response,
+        products: filteredProducts,
+      });
+    });
+  }
+
+  private updateProductCache(product: Product) {
+    this.productCacheById.set(product.id, product);
+    this.productCacheBySlug.set(product.slug, product);
+
+    const productId = product.id;
+
+    this.productsCache.forEach(productsResponse => {
+      productsResponse.products = productsResponse.products.map(currentProduct =>
+        currentProduct.id === productId ? product : currentProduct
+      );
+    });
   }
 
   getAllRelatedGroups() {

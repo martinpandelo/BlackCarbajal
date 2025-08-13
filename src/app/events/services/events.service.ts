@@ -25,47 +25,47 @@ const emptyEvent: EventItem = {
 })
 export class EventsService {
 
-  private http = inject(HttpClient);
-  private eventsCache = new Map<string, EventsResponse>();
-  private eventCache = new Map<string, EventItem>();
-  private eventCacheById = new Map<number, EventItem>();
+    private http = inject(HttpClient);
+    private eventsCache = new Map<string, EventsResponse>();
+    private eventCache = new Map<string, EventItem>();
+    private eventCacheById = new Map<number, EventItem>();
 
-  getEvents( options: Options ):Observable<EventsResponse> {
-    const { limit = 48, offset = 0 } = options;
+    getEvents( options: Options ):Observable<EventsResponse> {
+      const { limit = 48, offset = 0 } = options;
 
-    const key = `${limit}-${offset}`;
+      const key = `${limit}-${offset}`;
 
-    if (this.eventsCache.has( key )) {
-      return of(this.eventsCache.get(key)!);
-    }
-
-    return this.http.get<EventsResponse>(`${apiUrl}/events`, {
-      params: {
-        limit: limit,
-        offset: offset,
+      if (this.eventsCache.has( key )) {
+        return of(this.eventsCache.get(key)!);
       }
-    }).pipe(
-      tap( response => {
-        this.eventsCache.set( key, response);
-      })
-    )
-  }
 
-  getEventBySlug( slug: string ): Observable<EventItem> {
-    if (this.eventCache.has(slug)) {
-      return of(this.eventCache.get(slug)!)
+      return this.http.get<EventsResponse>(`${apiUrl}/events`, {
+        params: {
+          limit: limit,
+          offset: offset,
+        }
+      }).pipe(
+        tap( response => {
+          this.eventsCache.set( key, response);
+        })
+      )
     }
 
-    return this.http.get<EventItem>(`${ apiUrl }/events/slug/${slug}`)
-    .pipe(
-      tap((event) => {
-        this.eventCache.set( event.slug, event );
-        this.eventCacheById.set(event.id, event);
-      })
-    )
-  }
+    getEventBySlug( slug: string ): Observable<EventItem> {
+      if (this.eventCache.has(slug)) {
+        return of(this.eventCache.get(slug)!)
+      }
 
-  getEventById(id: string): Observable<EventItem> {
+      return this.http.get<EventItem>(`${ apiUrl }/events/slug/${slug}`)
+      .pipe(
+        tap((event) => {
+          this.eventCache.set( event.slug, event );
+          this.eventCacheById.set(event.id, event);
+        })
+      )
+    }
+
+    getEventById(id: string): Observable<EventItem> {
       const idNum = Number(id);
 
       if (idNum === 0) {
@@ -82,7 +82,7 @@ export class EventsService {
           this.eventCache.set(event.slug, event);
         })
       );
-  }
+    }
 
     createEvent(eventLike: Partial<EventItem>, imageFileList?: FileList): Observable<EventItem>{
       const currentImages = eventLike.images ?? [];
@@ -125,41 +125,6 @@ export class EventsService {
       );
     }
 
-    private removeEventFromCache(id: number) {
-      // Borrar de los mapas individuales
-      this.eventCacheById.delete(id);
-
-      // eliminar del cache por slug
-      for (const [slug, event] of this.eventCache.entries()) {
-        if (event.id === id) {
-          this.eventCache.delete(slug);
-          break;
-        }
-      }
-
-      // Limpiar el evento de todos los arrays de events en el cache
-      this.eventsCache.forEach((response, key) => {
-        const filteredEvents = response.events.filter(event => event.id !== id);
-        this.eventsCache.set(key, {
-          ...response,
-          events: filteredEvents,
-        });
-      });
-    }
-
-    updateEventCache(event: EventItem) {
-      this.eventCacheById.set(event.id, event);
-      this.eventCache.set(event.slug, event);
-
-      const eventId = event.id;
-
-      this.eventsCache.forEach(eventsResponse => {
-        eventsResponse.events = eventsResponse.events.map(currentEvent =>
-          currentEvent.id === eventId ? event : currentEvent
-        );
-      });
-    }
-
     uploadImages(images?: FileList): Observable<string[]>{
       if(!images) return of([]);
 
@@ -177,6 +142,38 @@ export class EventsService {
       return this.http.post<{ fileName: string}>(`${apiUrl}/files/event`, formData).pipe(
         map( (resp) => resp.fileName )
       )
+    }
+
+    private removeEventFromCache(id: number) {
+      this.eventCacheById.delete(id);
+
+      for (const [slug, event] of this.eventCache.entries()) {
+        if (event.id === id) {
+          this.eventCache.delete(slug);
+          break;
+        }
+      }
+
+      this.eventsCache.forEach((response, key) => {
+        const filteredEvents = response.events.filter(event => event.id !== id);
+        this.eventsCache.set(key, {
+          ...response,
+          events: filteredEvents,
+        });
+      });
+    }
+
+    private updateEventCache(event: EventItem) {
+      this.eventCacheById.set(event.id, event);
+      this.eventCache.set(event.slug, event);
+
+      const eventId = event.id;
+
+      this.eventsCache.forEach(eventsResponse => {
+        eventsResponse.events = eventsResponse.events.map(currentEvent =>
+          currentEvent.id === eventId ? event : currentEvent
+        );
+      });
     }
 
 }

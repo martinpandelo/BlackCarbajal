@@ -79,10 +79,8 @@ export class MaterialsService {
   }
 
   private removeMaterialFromCache(id: number) {
-    // Borrar de los mapas individuales
     this.materialCacheById.delete(id);
 
-    // Limpiar el material de todos los arrays de materials en el cache
     this.materialsCache.forEach((response, key) => {
       const filteredMaterials = response.materials.filter(material => material.id !== id);
       this.materialsCache.set(key, {
@@ -92,7 +90,7 @@ export class MaterialsService {
     });
   }
 
-  updateMaterialCache(material: Material) {
+  private updateMaterialCache(material: Material) {
       this.materialCacheById.set(material.id, material);
 
       const materialId = material.id;

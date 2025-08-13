@@ -1,40 +1,41 @@
 # BlackCarbajalWeb
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+Este proyecto fue generado usando [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
 
-## Development server
+## Instalar dependencias de desarrollo
 
-To start a local development server, run:
+Una vez descargado el proyecto, instalar las dependencias ejecutando:
+
+```bash
+npm install
+```
+
+## Configuración del Backend
+
+Esta aplicación contiene servicios para hacer peticiones http a una API con base de datos MySQL.
+Debe levantar la base de datos localmente y descargar los archivos de la API o correr la API y la BBDD en su lugar de producción.
+Tenga en cuenta las variables de entorno para la llamada a la API.
+
+
+## Servidor de desarrollo
+
+Para iniciar el servidor local de desarrollo, ejecutar:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
+Una vez que el servidor esté en funcionamiento, abra su navegador y navegue a `http://localhost:4200/` o el URL indicado en la consola. La aplicación se recargará automáticamente al modificar cualquier archivo fuente.
 
 ## Building
 
-To build the project run:
+Para hacer la compilación de producción y generar el directorio final de distribución, ejecutar:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Esto compilará tu proyecto y almacenará los artefactos de compilación en el directorio `dist/`. De forma predeterminada, la compilación de producción optimiza el rendimiento y la velocidad de tu aplicación.
 
 ## Running unit tests
 

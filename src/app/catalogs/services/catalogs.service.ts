@@ -124,7 +124,7 @@ export class CatalogsService {
       });
     }
 
-    updateCatalogCache(catalog: Catalogs) {
+    private updateCatalogCache(catalog: Catalogs) {
         this.catalogCacheById.set(catalog.id, catalog);
 
         const catalogId = catalog.id;

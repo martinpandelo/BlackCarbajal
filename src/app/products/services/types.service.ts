@@ -18,7 +18,6 @@ const emptyType: Type = {
 export class TypesService {
 
   private http = inject(HttpClient);
-
   private typesCache = new Map<string, TypesResponse>();
   private typeCacheById = new Map<number, Type>();
 
@@ -78,10 +77,8 @@ export class TypesService {
   }
 
   private removeTypeFromCache(id: number) {
-    // Borrar de los mapas individuales
     this.typeCacheById.delete(id);
 
-    // Limpiar el type de todos los arrays de types en el cache
     this.typesCache.forEach((response, key) => {
       const filteredTypes = response.types.filter(type => type.id !== id);
       this.typesCache.set(key, {
@@ -91,7 +88,7 @@ export class TypesService {
     });
   }
 
-  updateTypeCache(type: Type) {
+  private updateTypeCache(type: Type) {
       this.typeCacheById.set(type.id, type);
 
       const typeId = type.id;

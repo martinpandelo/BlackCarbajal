@@ -23,7 +23,6 @@ export class SlideService {
       private slideCache = new Map<string, Slides[]>();
 
       getSlides():Observable<Slides[]> {
-
         const cacheKey = 'slides';
 
         if (this.slideCache.has( cacheKey )) {
@@ -50,6 +49,7 @@ export class SlideService {
 
       uploadImage(file: File): Observable<string> {
         const formData = new FormData();
+
         formData.append('file', file);
         return this.http.post<{ fileName: string }>(`${apiUrl}/files/slide`, formData)
           .pipe(map(resp => resp.fileName));
@@ -114,7 +114,7 @@ export class SlideService {
         });
       }
 
-      updateSlideCache(slide: Slides) {
+      private updateSlideCache(slide: Slides) {
         const slideId = slide.id;
 
         this.slideCache.forEach((slidesArray, key) => {
