@@ -8,6 +8,7 @@ import { ProductCardComponent } from '@products/components/product-card/product-
 import { CatalogsComponent } from '@catalogs/components/home-catalogs/home-catalogs.component';
 import { SlicePipe } from '@angular/common';
 import { pathImagePipe } from '@shared/pipes/path-image.pipe';
+import { CategoriesService } from '@products/services/categories.service';
 
 
 @Component({
@@ -18,10 +19,12 @@ import { pathImagePipe } from '@shared/pipes/path-image.pipe';
 export class HomePageComponent {
 
   productsService = inject(ProductsService);
+  categoriesService = inject(CategoriesService);
+
 
   categoryResource = rxResource({
     loader: () => {
-      return this.productsService.getCategories({ })
+      return this.categoriesService.getCategories({ })
     }
   });
 

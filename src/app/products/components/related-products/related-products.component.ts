@@ -14,6 +14,9 @@ export class RelatedProductsComponent {
   categorySlug = input.required<string>();
   categoryName = input.required<string>();
   productExclude = input.required<string>();
+  typeSlug = input.required<string>();
+  materialSlug = input.required<string>();
+
 
   productService = inject(ProductsService);
 
@@ -21,13 +24,17 @@ export class RelatedProductsComponent {
     request: () => {
       return {
         categoria: this.categorySlug(),
+        tipo: this.typeSlug(),
+        material: this.materialSlug(),
         exclude: this.productExclude()
       };
     },
     loader: ({ request }) => {
       if (!request) return of({ products: [] });
       return this.productService.getProducts({
-        categoria: request.categoria
+        categoria: request.categoria,
+        tipo: request.tipo,
+        material: request.material,
       }).pipe(
         map(res => ({
           products: res.products

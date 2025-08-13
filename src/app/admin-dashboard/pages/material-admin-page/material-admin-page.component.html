@@ -1,1 +1,11 @@
-<p>material-admin-page works!</p>
+@if ( materialResource.isLoading() ) {
+<div class="flex justify-center items-center h-screen">
+  <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@if ( materialResource.hasValue() ) {
+
+  <admin-material-details [material]="materialResource.value()" />
+
+}

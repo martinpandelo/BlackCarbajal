@@ -19,7 +19,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
         anchorScrolling: 'enabled',
       })
-      ),
+    ),
     provideHttpClient(
       withFetch(),
       withInterceptors([
@@ -29,3 +29,5 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'es-AR' }
   ]
 };
+
+

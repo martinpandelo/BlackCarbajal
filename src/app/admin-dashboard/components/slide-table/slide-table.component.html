@@ -1,0 +1,43 @@
+<div class="overflow-x-auto">
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th class="text-primary">
+            Imágen Descktop
+        </th>
+        <th class="text-primary">
+            Imágen Mobile
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (slide of slides; track slide.id) {
+        <tr class="hover:bg-base-300">
+          <td>
+            <img
+              [src]="slide.image_desktop| pathImage: 'slides'"
+              alt="imagen escritorio"
+              class="h-20"/>
+          </td>
+          <td>
+            <img
+              [src]="slide.image_mobile| pathImage: 'slides'"
+              alt="imagen mobile"
+              class="h-20"/>
+          </td>
+          <th>
+            <a [routerLink]="['/admin/slide', slide.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteSlide(slide.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+    </tbody>
+
+  </table>
+</div>
+

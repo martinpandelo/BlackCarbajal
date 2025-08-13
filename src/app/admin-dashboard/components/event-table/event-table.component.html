@@ -1,0 +1,44 @@
+
+<div class="overflow-x-auto">
+  <table class="table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th class="cursor-pointer text-primary">
+            Título
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- row -->
+
+      @for (event of events; track event.id) {
+        <tr class="hover:bg-base-300">
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar">
+                <div class="mask mask-squircle h-12 w-12">
+                  <img
+                    [src]="event.images | pathImage:'eventos'"
+                    [alt]="event.title" />
+                </div>
+              </div>
+              <div>
+                <a [routerLink]="['/admin/event', event.id]" class="font-bold hover:text-accent transition-colors duration-300">{{ event.title }}</a>
+                <div class="text-sm opacity-50"></div>
+              </div>
+            </div>
+          </td>
+          <th>
+            <a [routerLink]="['/admin/event', event.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteEvent(event.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+
+  </table>
+</div>

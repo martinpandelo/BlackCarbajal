@@ -1,8 +1,8 @@
 import { NgClass } from '@angular/common';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FrontService } from '@website-front/services/front.service';
 import { pathImagePipe } from '@shared/pipes/path-image.pipe';
+import { SlideService } from '@website-front/services/slide.service';
 
 @Component({
   selector: 'home-main-carousel',
@@ -11,7 +11,7 @@ import { pathImagePipe } from '@shared/pipes/path-image.pipe';
 })
 export class MainCarouselComponent implements OnInit, OnDestroy {
 
-  slideService = inject(FrontService);
+  slideService = inject(SlideService);
 
   slideResource = rxResource({
     loader: () => {

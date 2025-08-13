@@ -11,6 +11,9 @@ import { firstValueFrom } from 'rxjs';
 import { pathImagePipe } from '@shared/pipes/path-image.pipe';
 import { Type } from '@products/interfaces/types.interface';
 import { Material } from '@products/interfaces/materials.interface';
+import { MaterialsService } from '@products/services/materials.service';
+import { TypesService } from '@products/services/types.service';
+import { CategoriesService } from '@products/services/categories.service';
 
 @Component({
   selector: 'admin-product-details',
@@ -21,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
 
   router = inject(Router);
   formUtils = FormUtils;
+
   product = input.required<Product>();
   categories: Category[] = [];
   relatedGroups: { key: string, image: string }[] = [];
@@ -29,6 +33,10 @@ export class ProductDetailsComponent implements OnInit {
 
   fb = inject(FormBuilder);
   productService = inject(ProductsService);
+  categoriesService = inject(CategoriesService);
+  materialService = inject(MaterialsService);
+  typeService = inject(TypesService);
+
   wasSaved = signal(false);
   successMessage = signal('');
   isLoading = signal(false);
@@ -95,7 +103,7 @@ export class ProductDetailsComponent implements OnInit {
 
 
   loadCategories() {
-    this.productService.getCategories({ categoria: '' }).subscribe({
+    this.categoriesService.getCategories({ categoria: '' }).subscribe({
       next: (resp) => {
         this.categories = resp.categories;
         this.trySetForm();
@@ -119,19 +127,8 @@ export class ProductDetailsComponent implements OnInit {
     return (this.productForm.value.categories ?? []).some((c: Category) => c.slug === slug);
   }
 
-  loadRelatedGroups() {
-    this.productService.getAllRelatedGroups().subscribe({
-      next: (data) => {
-        this.relatedGroups = data;
-      },
-      error: () => {
-        this.relatedGroups = [];
-      }
-    });
-  }
-
   loadTypes() {
-    this.productService.getTypes().subscribe({
+    this.typeService.getTypes().subscribe({
       next: (resp) => {
         this.types = resp.types;
         this.trySetForm();
@@ -140,7 +137,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   loadMaterials() {
-    this.productService.getMaterials().subscribe({
+    this.materialService.getMaterials().subscribe({
       next: (resp) => {
         this.materials = resp.materials;
         this.trySetForm();
@@ -153,6 +150,19 @@ export class ProductDetailsComponent implements OnInit {
       this.setFormValue(this.product());
     }
   }
+
+  loadRelatedGroups() {
+    this.productService.getAllRelatedGroups().subscribe({
+      next: (data) => {
+        this.relatedGroups = data;
+      },
+      error: () => {
+        this.relatedGroups = [];
+      }
+    });
+  }
+
+
 
 
   async onSubmit() {
@@ -201,7 +211,6 @@ export class ProductDetailsComponent implements OnInit {
 
       } else { //actualiza producto
 
-        console.log(productLike);
         await firstValueFrom(
           this.productService.updateProduct(this.product().id ,productLike, this.imageFileList)
         )
@@ -216,7 +225,7 @@ export class ProductDetailsComponent implements OnInit {
 
       }
     } catch (err) {
-      // podrías agregar manejo de errores aquí si querés mostrar feedback
+      // manejo de errores aquí
     } finally {
       this.isLoading.set(false);
     }

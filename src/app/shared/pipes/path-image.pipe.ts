@@ -16,6 +16,10 @@ export class pathImagePipe implements PipeTransform {
       return '/assets/images/no-image.jpg';
     }
 
+    if (image.startsWith('http') || image.startsWith('blob:')) {
+      return image;
+    }
+
     return `${baseUrl}/files/${tipo}/${image}`;
   }
 

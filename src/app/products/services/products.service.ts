@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { CategoriesResponse } from '@products/interfaces/categories.interface';
-import { MaterialsResponse } from '@products/interfaces/materials.interface';
 import { Product, ProductsResponse } from '@products/interfaces/products.interface';
-import { TypesResponse } from '@products/interfaces/types.interface';
 import { forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 
@@ -53,7 +51,6 @@ export class ProductsService {
   private productCacheById = new Map<number, Product>();
   private productCacheBySlug = new Map<string, Product>();
   private productCacheRelated = new Map<string, Product[]>();
-  private categoriesCache = new Map<string, CategoriesResponse>();
 
 
   getProducts(options: Options): Observable<ProductsResponse> {
@@ -66,7 +63,7 @@ export class ProductsService {
       novedad = false,
       search = '',
       sortBy = 'pd_id',
-      direction = 'asc'
+      direction = 'desc'
     } = options;
 
     const key = `${limit}-${offset}-${categoria}-${novedad}-${search}-${sortBy}-${direction}-${tipo}-${material}`;
@@ -92,33 +89,6 @@ export class ProductsService {
         this.productsCache.set(key, response);
       })
     );
-  }
-
-
-  getCategories( options: Options ):Observable<CategoriesResponse> {
-    const { categoria = '' } = options;
-
-    if (this.categoriesCache.has( categoria )) {
-      return of(this.categoriesCache.get(categoria)!);
-    }
-
-    return this.http.get<CategoriesResponse>(`${apiUrl}/categories`, {
-      params: {
-        categoria: categoria,
-      }
-    }).pipe(
-      tap( response => {
-        this.categoriesCache.set( categoria, response);
-      })
-    )
-  }
-
-  getTypes(): Observable<TypesResponse> {
-    return this.http.get<TypesResponse>(`${apiUrl}/types`);
-  }
-
-  getMaterials(): Observable<MaterialsResponse> {
-    return this.http.get<MaterialsResponse>(`${apiUrl}/materials`);
   }
 
   getProductBySlug(slug: string): Observable<Product> {
@@ -198,7 +168,7 @@ export class ProductsService {
     // Borrar de los mapas individuales
     this.productCacheById.delete(id);
 
-    // También eliminar del cache por slug
+    // eliminar del cache por slug
     for (const [slug, product] of this.productCacheBySlug.entries()) {
       if (product.id === id) {
         this.productCacheBySlug.delete(slug);
@@ -252,14 +222,6 @@ export class ProductsService {
     return this.http.get<{ key: string, image: string }[]>(`${apiUrl}/products/relacionados`);
   }
 
-  uploadRelatedGroupImage(formData: FormData) {
-    return this.http.post(`${apiUrl}/products/relacionados`, formData);
-  }
-
-  deleteRelatedGroup(key: string) {
-    return this.http.delete(`${apiUrl}/products/relacionados/${key}`);
-  }
-
   getProductsByRelated(related: string): Observable<Product[]> {
     if (this.productCacheRelated.has(related)) {
       return of(this.productCacheRelated.get(related)!);
@@ -270,6 +232,14 @@ export class ProductsService {
         this.productCacheRelated.set(related, response);
       })
     );;
+  }
+
+  uploadRelatedGroupImage(formData: FormData) {
+    return this.http.post(`${apiUrl}/products/relacionados`, formData);
+  }
+
+  deleteRelatedGroup(key: string) {
+    return this.http.delete(`${apiUrl}/products/relacionados/${key}`);
   }
 
 }

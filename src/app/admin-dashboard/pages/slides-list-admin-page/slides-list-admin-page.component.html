@@ -1,0 +1,19 @@
+<div class="flex gap-2 items-center">
+  <h1 class="text-2xl font-bold">Listado de slides</h1>
+  <div class="flex flex-1"></div>
+  <button routerLink="/admin/slide/0" class="btn btn-primary">Nuevo slide</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- Listado -->
+<slide-table
+  [slides]="slideResource.value() ?? []"
+  (delete)="onDeleteSlide($event)"
+/>
+
+<div class="divider"></div>
+
+<slide-order
+  [slidesInput]="slideResource.value() ?? []"
+/>

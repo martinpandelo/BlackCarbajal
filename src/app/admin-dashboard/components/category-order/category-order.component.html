@@ -1,0 +1,40 @@
+<div class="flex flex-col items-center gap-4 mt-15">
+
+    <div class="flex gap-2 max-w-md w-full items-center">
+      <h1 class="text-2xl font-bold">Ordenar</h1>
+      <div class="flex flex-1"></div>
+      <button
+          class="btn btn-primary"
+          (click)="saveOrder()"
+        >
+          Guardar Orden
+        </button>
+    </div>
+
+    <div
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      class="max-w-md w-full"
+    >
+      @for (category of categories(); track category.id) {
+      <div
+        class="p-2 mb-1 border rounded bg-gray-100 cursor-move flex items-center justify-between"
+        cdkDrag
+      >
+        <span>{{ category.title }}</span>
+        <span class="text-gray-500">#{{ category.order }}</span>
+      </div>
+      }
+
+    </div>
+</div>
+
+@if (wasSaved()) {
+  <div class="toast toast-top toast-center z-42">
+    <div class="alert alert-success">
+      <span>Orden guardado correctamente</span>
+    </div>
+  </div>
+}
+
+

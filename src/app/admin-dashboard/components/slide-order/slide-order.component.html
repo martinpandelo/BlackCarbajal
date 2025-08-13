@@ -1,0 +1,43 @@
+<div class="flex flex-col items-center gap-4 mt-15">
+
+    <div class="flex gap-2 max-w-md w-full items-center">
+      <h1 class="text-2xl font-bold">Ordenar</h1>
+      <div class="flex flex-1"></div>
+      <button
+          class="btn btn-primary"
+          (click)="saveOrder()"
+        >
+          Guardar Orden
+        </button>
+    </div>
+
+    <div
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      class="max-w-md w-full"
+    >
+      @for (slide of slides(); track slide.id) {
+      <div
+        class="p-2 mb-1 border rounded bg-gray-100 cursor-move flex items-center justify-between"
+        cdkDrag
+      >
+        <span><img
+              [src]="slide.image_desktop| pathImage: 'slides'"
+              alt="imagen escritorio"
+              class="h-20"/></span>
+        <span class="text-gray-500">#{{ slide.order }}</span>
+      </div>
+      }
+
+    </div>
+</div>
+
+@if (wasSaved()) {
+  <div class="toast toast-top toast-center z-42">
+    <div class="alert alert-success">
+      <span>Orden guardado correctamente</span>
+    </div>
+  </div>
+}
+
+

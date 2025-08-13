@@ -1,0 +1,111 @@
+
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+
+<!-- Barra sticky dentro del form -->
+<div class="sticky top-0 z-40 bg-base-100/90 backdrop-blur border-b border-base-300 px-4 lg:px-8 py-3">
+  <div class="flex items-center gap-3">
+    <h1 class="flex-1 text-2xl lg:text-3xl font-bold truncate">
+      @if ( category().title ) {
+        {{ category().title }}
+      } @else {
+        Nuevo Evento
+      }
+    </h1>
+
+    <button class="btn btn-primary btn-lg" type="submit">
+      @if (isLoading()) {
+        <span class="loading loading-spinner loading-sm"></span>
+        Guardando...
+      } @else {
+        Guardar
+      }
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-15 px-4 lg:px-8 pt-10">
+
+  <!-- Datos generales -->
+  <div class="col-span-2">
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Título</legend>
+      <input
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="Título"
+        formControlName="title"
+        [class.border-error]="formUtils.isValidField(categoryForm, 'title')"
+         />
+        <form-error-label [control]="categoryForm.get('title')!" fieldName="title" />
+    </fieldset>
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Slug</legend>
+      <input
+        type="text"
+        placeholder="Slug"
+        class="input input-bordered w-full"
+        formControlName="slug"
+        [class.border-error]="formUtils.isValidField(categoryForm, 'slug')"
+      />
+      <form-error-label [control]="categoryForm.get('slug')!" fieldName="slug" />
+    </fieldset>
+
+
+    <fieldset class="fieldset">
+      <legend class="fieldset-legend">Descripción</legend>
+      <textarea
+        class="textarea textarea-bordered w-full"
+        placeholder="Descripción"
+        rows="6"
+        formControlName="description"
+        [class.border-error]="formUtils.isValidField(categoryForm, 'description')"
+      ></textarea>
+      <form-error-label [control]="categoryForm.get('description')!" fieldName="description" />
+    </fieldset>
+
+  </div>
+
+  <!-- Imágenes -->
+  <div class="flex flex-col gap-2">
+
+      <div  class="relative group">
+        <img
+          [src]="categoryForm.value.image | pathImage:'categorias'"
+          alt="Imagen"
+          class="w-full object-cover rounded-xl"
+        />
+        @if (categoryForm.value.image) {
+        <button
+          type="button"
+          (click)="removeImage()"
+          class="absolute top-1 right-1 btn btn-xs btn-error opacity-0 group-hover:opacity-100 transition-opacity">
+          ✕
+        </button>
+        }
+      </div>
+
+
+    <!-- Input file -->
+    <input
+      type="file"
+      accept="image/*"
+      class="file-input file-input-primary w-full mt-4"
+      (change)="onFilesChanged($event)"
+    />
+
+  </div>
+  <!--Fin imagenes-->
+
+</div>
+
+</form>
+
+@if (wasSaved()) {
+  <div class="toast toast-top toast-center z-42">
+    <div class="alert alert-success">
+      <span>{{ successMessage() }}</span>
+    </div>
+  </div>
+}

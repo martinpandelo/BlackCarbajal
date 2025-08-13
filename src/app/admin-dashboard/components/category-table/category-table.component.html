@@ -1,0 +1,49 @@
+<div class="overflow-x-auto">
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th class="text-primary">
+            Nombre
+        </th>
+        <th class="text-primary">
+            Descripción
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (category of categories; track category.id) {
+        <tr class="hover:bg-base-300">
+          <td>
+            <div class="flex items-center gap-3">
+              <div class="avatar">
+                <div class="mask mask-squircle h-12 w-12">
+                  <img
+                    [src]="category.image | pathImage: 'categorias'"
+                    [alt]="category.title" />
+                </div>
+              </div>
+              <div>
+                <a [routerLink]="['/admin/category', category.id]" class="font-bold hover:text-accent transition-colors duration-300">{{ category.title }}</a>
+                <div class="text-sm opacity-50"></div>
+              </div>
+            </div>
+          </td>
+          <td>
+              {{ category.description }}
+          </td>
+          <th>
+            <a [routerLink]="['/admin/category', category.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteCategory(category.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+    </tbody>
+
+  </table>
+</div>
+

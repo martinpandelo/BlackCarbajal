@@ -1,0 +1,31 @@
+<div class="overflow-x-auto">
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th class="text-primary">
+            Nombre
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (type of types; track type.id) {
+        <tr class="hover:bg-base-300">
+          <td>
+              {{ type.name }}
+          </td>
+          <th>
+            <a [routerLink]="['/admin/type', type.id]"  class="btn btn-success btn-xs">Editar</a>
+          </th>
+          <th>
+            <button class="btn btn-error btn-xs" (click)="onDeleteType(type.id)" >Eliminar</button>
+          </th>
+        </tr>
+      }
+    </tbody>
+
+  </table>
+</div>
+

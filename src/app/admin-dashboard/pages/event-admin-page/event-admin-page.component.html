@@ -1,0 +1,9 @@
+@if ( eventResource.isLoading() ) {
+<div class="flex justify-center items-center h-screen">
+  <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@if ( eventResource.hasValue() ) {
+  <admin-event-details [event]="eventResource.value()" />
+}

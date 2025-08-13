@@ -37,7 +37,7 @@ export class ProductsAdminPageComponent {
 
     searchQuery = signal('');
     sortBy = signal<keyof Product | null>(null);
-    sortDirection = signal<'asc' | 'desc'>('asc');
+    sortDirection = signal<'asc' | 'desc'>('desc');
 
     refreshSignal = signal(0);
 

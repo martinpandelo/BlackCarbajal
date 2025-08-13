@@ -1,12 +1,16 @@
 import { Component, computed, effect, inject } from '@angular/core';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductsService } from '@products/services/products.service';
-import { PaginationService } from '@shared/components/pagination/pagination.service';
 import { ProductCardComponent } from '@products/components/product-card/product-card.component';
 import { PaginationComponent } from '@shared/components/pagination/pagination.component';
 import { map } from 'rxjs';
 import { TruncateTextPipe } from '@shared/pipes/truncate-text.pipe';
+
+import { ProductsService } from '@products/services/products.service';
+import { CategoriesService } from '@products/services/categories.service';
+import { TypesService } from '@products/services/types.service';
+import { MaterialsService } from '@products/services/materials.service';
+import { PaginationService } from '@shared/components/pagination/pagination.service';
 
 
 @Component({
@@ -17,6 +21,9 @@ import { TruncateTextPipe } from '@shared/pipes/truncate-text.pipe';
 export class ProductsPageComponent {
 
   productsService = inject(ProductsService);
+  categoriesService = inject(CategoriesService);
+  materialsService = inject(MaterialsService);
+  typesService = inject(TypesService);
   paginationService = inject(PaginationService);
 
   route = inject(ActivatedRoute);
@@ -66,7 +73,7 @@ export class ProductsPageComponent {
   categoryResource = rxResource({
     request: () => ({ }),
     loader: () => {
-      return this.productsService.getCategories({ });
+      return this.categoriesService.getCategories({ });
     }
   });
 
@@ -109,7 +116,7 @@ export class ProductsPageComponent {
   //tipos de articulos
   typeResource = rxResource({
     request: () => ({}),
-    loader: () => this.productsService.getTypes()
+    loader: () => this.typesService.getTypes()
   });
 
   onTipoSelect(slug: string) {
@@ -137,7 +144,7 @@ export class ProductsPageComponent {
   //materiales
   materialResource = rxResource({
     request: () => ({}),
-    loader: () => this.productsService.getMaterials()
+    loader: () => this.materialsService.getMaterials()
   });
 
   onMaterialSelect(slug: string) {

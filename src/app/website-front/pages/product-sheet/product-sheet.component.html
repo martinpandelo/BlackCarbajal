@@ -55,17 +55,40 @@
       </div>
   </section>
 
-@if (productResource.value().related !== null  ) {
-  <section class="px-6 lg:px-30 pt-20">
-      <h3 class="text-3xl mb-5">Relación de Tamaños</h3>
-      <div>
-        <a data-fancybox="tira" [href]="productResource.value().related! | pathImage:'relacion'">
-          <img [src]="productResource.value().related! | pathImage:'relacion'" class="w-full" alt="{{ productResource.value().cod }}" />
-        </a>
-      </div>
-  </section>
-}
+  @if (productResource.value().related !== null  ) {
+    <section class="lg:px-30 pt-20">
+        <h3 class="px-6 text-3xl mb-5">Relación de Tamaños</h3>
+        <div>
+          <a data-fancybox="tira" [href]="productResource.value().related! | pathImage:'relacion'">
+            <img [src]="productResource.value().related! | pathImage:'relacion'" class="w-full" alt="{{ productResource.value().cod }}" />
+          </a>
+        </div>
+    </section>
+  }
 
-<related-products [categorySlug]="productResource.value().categories[0].slug" [categoryName]="productResource.value().categories[0].name" [productExclude]="productResource.value().slug" />
+  @if (recentProducts().length > 0) {
+    <section class="px-6 lg:px-30 pt-20">
+      <h3 class="text-3xl mb-5">Vistos recientemente</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        @for (item of recentProducts(); track item.slug) {
+          <a [routerLink]="['/producto', item.slug]" class="block border rounded-lg overflow-hidden hover:shadow-lg transition">
+            <img [src]="item.images | pathImage:'productos'" class="w-full h-40 object-cover" />
+            <div class="p-2 text-center">
+              <div class="font-bold">{{ item.cod }}</div>
+              <div class="text-xs">{{ item.title }}</div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <related-products
+    [categorySlug]="productResource.value().categories[0].slug"
+    [typeSlug]="productResource.value().type?.slug ?? ''"
+    [materialSlug]="productResource.value().material?.slug ?? ''"
+    [categoryName]="productResource.value().categories[0].name"
+    [productExclude]="productResource.value().slug"
+  />
 
 }

@@ -1,0 +1,19 @@
+<div class="flex gap-2 items-center">
+  <h1 class="text-2xl font-bold">Listado de eventos</h1>
+  <div class="flex flex-1"></div>
+  <button routerLink="/admin/category/0" class="btn btn-primary">Nuevo evento</button>
+</div>
+
+<div class="divider"></div>
+
+<!-- Listado -->
+<category-table
+  [categories]="categoryResource.value()?.categories ?? []"
+  (delete)="onDeleteCategory($event)"
+/>
+
+<div class="divider"></div>
+
+<category-order
+  [categoriesInput]="categoryResource.value()?.categories ?? []"
+/>

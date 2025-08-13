@@ -37,7 +37,9 @@ export class MaterialsService {
   }
 
   getMaterialById( id: number): Observable<Material>{
-    if (id === 0) {
+    const idNum = Number(id);
+
+    if (idNum === 0) {
       return of(emptyMaterial);
     }
 
@@ -49,6 +51,21 @@ export class MaterialsService {
       tap( resp => {
         this.materialCacheById.set(id,resp);
       })
+    )
+  }
+
+  createMaterial(materialLike: Partial<Material>): Observable<Material>{
+      return this.http.post<Material>(`${apiUrl}/materials`, materialLike).pipe(
+        tap((material) => {
+          this.materialsCache.clear();
+          this.updateMaterialCache(material);
+        })
+      )
+  }
+
+  updateMaterial(id:number, materialLike: Partial<Material>): Observable<Material>{
+    return this.http.patch<Material>(`${apiUrl}/materials/${id}`, materialLike).pipe(
+      tap(( material ) => this.updateMaterialCache(material))
     )
   }
 
@@ -73,6 +90,18 @@ export class MaterialsService {
         materials: filteredMaterials,
       });
     });
+  }
+
+  updateMaterialCache(material: Material) {
+      this.materialCacheById.set(material.id, material);
+
+      const materialId = material.id;
+
+      this.materialsCache.forEach(materialsResponse => {
+        materialsResponse.materials = materialsResponse.materials.map(currentMaterial =>
+          currentMaterial.id === materialId ? material : currentMaterial
+        );
+      });
   }
 
 }

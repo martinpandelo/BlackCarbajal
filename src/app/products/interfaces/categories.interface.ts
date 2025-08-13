@@ -6,6 +6,7 @@ export interface Category {
   id:          number;
   slug:        string;
   title:       string;
-  description: null;
-  image:       null;
+  description: string | null;
+  image:       string;
+  order:       number
 }
